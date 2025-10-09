@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏创意随机生成器</title>
+    <title>文字游戏创意随机生成器</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* 使用 Google Fonts 提供的免费字体，让页面更好看 */
@@ -35,15 +35,15 @@
         <!-- 头部标题 -->
         <header class="text-center mb-8 border-b border-slate-200 pb-6">
             <h1 class="text-3xl md:text-4xl font-bold text-slate-800">
-                <span class="text-indigo-500">🎮</span> 游戏创意脑洞生成器
+                <span class="text-indigo-500">📝</span> 文字游戏创意脑洞生成器
             </h1>
-            <p class="text-slate-500 mt-2">点击一下，迸发你的下一个游戏大作灵感！</p>
+            <p class="text-slate-500 mt-2">点击一下，迸发你的下一个iOS文字游戏大作灵感！</p>
         </header>
 
         <!-- 生成按钮 -->
         <div class="text-center mb-8">
             <button id="generateBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-indigo-400/50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 btn-press-anim text-lg">
-                🚀 随机生成10个游戏创意
+                🚀 随机生成10个文字游戏创意
             </button>
         </div>
 
@@ -52,7 +52,7 @@
             <ul id="ideaList" class="space-y-4">
                 <!-- 初始占位符 -->
                 <li id="placeholder" class="text-center text-slate-400 p-8 bg-slate-50 rounded-lg">
-                    准备好迎接灵感风暴了吗？
+                    准备好迎接文字游戏的灵感风暴了吗？
                 </li>
             </ul>
         </div>
@@ -60,18 +60,69 @@
 
     <script>
         // --- 数据源 ---
-        // 视觉风格
-        const visualStyles = ['像素风', '写实风', '卡通渲染', '低模风', '赛博朋克', '黑暗哥特', '国风/水墨', '扁平/矢量风', '绘本/童话风', '剪影/皮影风', '涂鸦/简笔画'];
-        // 核心玩法机制
-        const coreMechanics = ['回合制', '即时制', '卡牌构筑', 'Roguelike', '塔防', '解谜', '模拟经营', '生存', '潜行', '合成/制作'];
+        // 文字游戏类型
+        const textGameTypes = [
+            '文字冒险游戏', '文字解谜游戏', '文字RPG游戏', '文字模拟游戏', 
+            '文字生存游戏', '文字推理游戏', '文字恋爱游戏', '文字经营游戏',
+            '文字恐怖游戏', '文字科幻游戏', '文字武侠游戏', '文字历史游戏',
+            '文字互动小说', '文字MUD游戏', '文字卡牌游戏', '文字策略游戏',
+            '文字回合游戏', '文字ARPG游戏', '文字沙盒游戏', '文字探索游戏',
+            '文字养成游戏', '文字放置游戏', '文字跑团游戏', '文字悬疑游戏',
+            '文字侦探游戏', '文字宫斗游戏', '文字商战游戏', '文字修仙游戏',
+            '文字竞技游戏', '文字音乐游戏', '文字教育游戏', '文字心理游戏'
+        ];
+        
+        // 文字游戏机制
+        const textGameMechanics = [
+            '分支剧情', '多结局', '选择导向', '文字解谜', '对话树系统',
+            '文字战斗', '属性养成', '物品合成', '时间管理', '资源管理',
+            '线索收集', '推理破案', '角色扮演', '情感选择', '道德抉择',
+            '文字描述战斗', '指令回合制', '实时文字反馈', '随机事件', '文字谜题',
+            '技能树系统', '好感度系统', '阵营系统', '声望系统', '成就系统',
+            '收集图鉴', '文字竞速', '文字拼图', '文字迷宫', '文字密码破译',
+            '文字经济系统', '文字建造系统', '文字探索系统', '文字合成系统', '文字进化系统'
+        ];
+        
         // 题材/世界观
-        const themes = ['魔幻', '科幻', '武侠', '仙侠', '末日废土', '克苏鲁', '历史', '校园', '蒸汽朋克', '侦探/悬疑', '美食/烹饪', '都市/现代', '神话传说'];
-        // 游戏类型/标签
-        const genres = ['RPG', 'ARPG', 'SRPG', 'Metroidvania', '视觉小说', '节奏游戏', '飞行射击(STG)', '点击放置', '无尽跑酷', '益智消除', '卡牌/桌游', '双摇杆射击'];
+        const themes = [
+            '魔幻', '科幻', '武侠', '仙侠', '末日废土', '克苏鲁', 
+            '历史', '校园', '蒸汽朋克', '侦探/悬疑', '美食/烹饪', 
+            '都市/现代', '神话传说', '宫廷权谋', '穿越重生', '奇幻冒险',
+            '赛博朋克', '西部牛仔', '中世纪', '未来世界', '古代文明',
+            '星际探索', '超能力', '吸血鬼与狼人', '神话再临', '平行世界',
+            '时间旅行', '人工智能', '虚拟现实', '魔法学院', '江湖恩怨',
+            '深海探险', '外太空殖民', '地下城探索', '神话时代', '近未来'
+        ];
+        
+        // 文字风格
+        const writingStyles = [
+            '古风文雅', '现代简洁', '诗意浪漫', '悬疑紧张', '幽默诙谐',
+            '严肃写实', '华丽辞藻', '口语化', '日记体', '书信体',
+            '对话为主', '描写细腻', '意识流', '碎片化叙事', '多视角叙事',
+            '古白话文', '网络流行语', '学术论文体', '新闻报道体', '剧本格式',
+            '内心独白', '旁白解说', '对话气泡', '电报体', '诗歌体',
+            '文言文风格', '方言特色', '专业术语', '童话语言', '哲学思辨'
+        ];
+        
+        // 游戏设定种类
+        const gameSettings = [
+            '时间循环', '身份互换', '记忆缺失', '超自然现象', '科技革命',
+            '世界末日', '异世界穿越', '梦境与现实交织', '时空错乱', '人格分裂',
+            '诅咒与祝福', '预言与命运', '秘密组织', '神秘代码', '古代遗迹',
+            '未来科技', '魔法契约', '灵魂绑定', '平行宇宙', '虚拟世界',
+            '基因改造', '人工智能觉醒', '外星文明', '神话复苏', '历史改变',
+            '超能力觉醒', '禁忌知识', '神秘疾病', '资源枯竭', '社会实验',
+            '语言魔法', '文字具现化', '思想读取', '情感可视化', '记忆交易',
+            '时间暂停', '空间传送', '因果律武器', '概念实体化', '规则改写'
+        ];
+        
         // 叙事风格
-        const narrativeStyles = ['线性叙事', '多结局', '碎片化叙事', '无对白', '元叙事'];
-        // 平台
-        const platforms = ['iOS'];
+        const narrativeStyles = [
+            '线性叙事', '多结局', '碎片化叙事', '非线性叙事', '元叙事', 
+            '多线并行', '倒叙插叙', '第一人称', '第二人称', '上帝视角',
+            '有限视角', '不可靠叙事', '多主角切换', '时间跳跃', '空间转换',
+            '交互式叙事', '环境叙事', '隐藏叙事', '玩家驱动叙事', '动态叙事'
+        ];
 
         // --- DOM 元素获取 ---
         const generateBtn = document.getElementById('generateBtn');
@@ -87,24 +138,37 @@
 
         // 创建一个完整的游戏创意描述，返回HTML和纯文本两个版本
         function createGameIdea() {
-            const mechanic1 = getRandomElement(coreMechanics);
-            let mechanic2 = getRandomElement(coreMechanics);
+            const gameType = getRandomElement(textGameTypes);
+            const mechanic1 = getRandomElement(textGameMechanics);
+            let mechanic2 = getRandomElement(textGameMechanics);
             while (mechanic1 === mechanic2) {
-                mechanic2 = getRandomElement(coreMechanics);
+                mechanic2 = getRandomElement(textGameMechanics);
             }
-            const combinedMechanics = Math.random() < 0.3 ? `${mechanic1} + ${mechanic2}` : mechanic1;
+            const combinedMechanics = Math.random() < 0.4 ? `${mechanic1} + ${mechanic2}` : mechanic1;
 
             const idea = {
-                style: getRandomElement(visualStyles),
+                type: gameType,
                 mechanics: combinedMechanics,
                 theme: getRandomElement(themes),
-                genre: getRandomElement(genres),
-                narrative: getRandomElement(narrativeStyles),
-                platform: getRandomElement(platforms)
+                writingStyle: getRandomElement(writingStyles),
+                setting: getRandomElement(gameSettings),
+                narrative: getRandomElement(narrativeStyles)
             };
             
-            const htmlString = `一款 <span class="font-semibold text-indigo-600">${idea.style}</span> 的 <span class="font-semibold text-emerald-600">${idea.theme}</span> 题材 <span class="font-semibold text-sky-600">${idea.genre}</span> 游戏，核心玩法是 <span class="font-semibold text-rose-600">${idea.mechanics}</span>，采用 <span class="font-semibold text-amber-600">${idea.narrative}</span>，计划登陆 <span class="font-semibold text-slate-700">${idea.platform}</span> 平台。`;
-            const textString = `一款${idea.style}的${idea.theme}题材${idea.genre}游戏，核心玩法是${idea.mechanics}，采用${idea.narrative}，计划登陆${idea.platform}平台。`;
+            const htmlString = `
+                <div class="space-y-2">
+                    <div class="font-semibold text-lg text-indigo-700">${idea.type}</div>
+                    <div class="text-slate-700">
+                        采用 <span class="font-medium text-emerald-600">${idea.writingStyle}</span> 的文字风格，
+                        设定在 <span class="font-medium text-sky-600">${idea.theme}</span> 世界，
+                        核心机制是 <span class="font-medium text-rose-600">${idea.mechanics}</span>，
+                        包含 <span class="font-medium text-purple-600">${idea.setting}</span> 的独特设定，
+                        叙事方式为 <span class="font-medium text-amber-600">${idea.narrative}</span>。
+                    </div>
+                </div>
+            `;
+            
+            const textString = `${idea.type}，采用${idea.writingStyle}的文字风格，设定在${idea.theme}世界，核心机制是${idea.mechanics}，包含${idea.setting}的独特设定，叙事方式为${idea.narrative}。`;
 
             return { html: htmlString, text: textString };
         }
@@ -119,12 +183,11 @@
             for (let i = 0; i < 10; i++) {
                 const newIdea = createGameIdea();
                 const listItem = document.createElement('li');
-                // 新增 'relative' 和 'group' 类，用于定位复制按钮和控制其显隐
                 listItem.className = 'idea-item bg-slate-50 border-l-4 border-indigo-400 p-4 rounded-md shadow-sm text-slate-700 relative group';
                 listItem.style.animationDelay = `${i * 0.05}s`;
                 
                 const textDiv = document.createElement('div');
-                textDiv.className = "pr-8"; // 为复制按钮留出空间
+                textDiv.className = "pr-8";
                 textDiv.innerHTML = newIdea.html;
                 listItem.appendChild(textDiv);
 
@@ -132,7 +195,6 @@
                 const copyIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>`;
                 const checkIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-green-500" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022z"/></svg>`;
                 
-                // 按钮默认在组（group）悬停时才显示
                 copyButton.className = 'absolute top-1/2 right-3 -translate-y-1/2 p-2 rounded-full bg-slate-200 text-slate-500 opacity-0 group-hover:opacity-100 transition-all focus:opacity-100 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-400';
                 copyButton.innerHTML = copyIconSVG;
                 copyButton.setAttribute('aria-label', '复制创意');
@@ -141,7 +203,7 @@
                 copyButton.addEventListener('click', () => {
                     const textarea = document.createElement('textarea');
                     textarea.value = newIdea.text;
-                    textarea.style.position = 'fixed'; // 使用 fixed 避免页面滚动
+                    textarea.style.position = 'fixed';
                     textarea.style.opacity = '0';
                     document.body.appendChild(textarea);
                     textarea.select();
@@ -155,7 +217,6 @@
                     }
                     document.body.removeChild(textarea);
 
-                    // 2秒后恢复原状
                     setTimeout(() => {
                         copyButton.innerHTML = copyIconSVG;
                         copyButton.setAttribute('title', '复制');
@@ -172,4 +233,3 @@
     </script>
 </body>
 </html>
-
